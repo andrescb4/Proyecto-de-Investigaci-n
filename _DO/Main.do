@@ -18,8 +18,10 @@ clear all
 
 * Memory allocation
 
-set memory
-//set memory 
+memory
+
+set max_memory 16g
+
 //////////////////////////Construcción de Pseudo-Panel//////////////////////////
 
 * Comparación entre los CV de las diferentes variables

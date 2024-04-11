@@ -12,7 +12,7 @@ use _IN\echBOLVIA.dta
 // Eliminar datos no utilizados
 gen gini=1
 
-replace year=. if year<=2011 
+replace year=. if year<2015 | year>2018
 dropmiss year, obs force
 
 replace born_year=. if born_year<=1979
