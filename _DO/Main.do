@@ -18,15 +18,11 @@ clear all
 
 * Memory allocation
 
-memory
-
-set max_memory 16g
-
 //////////////////////////Construcción de Pseudo-Panel//////////////////////////
 
 * Comparación entre los CV de las diferentes variables
 
-do _DO\Construccion.do
+//do _DO\Construccion.do
 
 *Comportamiento de Años de la encuesta
 

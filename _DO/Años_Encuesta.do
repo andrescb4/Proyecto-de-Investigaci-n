@@ -45,7 +45,7 @@ graph export "_GRAPHS\_PNG\Qfit_2015-2017.png", as(png) name("Graph") replace
 
 local cv
 
-sum yedc if year>=2015 & year<2017
+sum yedc if year>=2015 & year<2018
  
 local cv = (r(sd)/r(mean))*100
 
@@ -53,5 +53,9 @@ display `cv'
 
 * 3.- Eliminar años no utilizados de la base de datos agrupada
 
-//replace year=. if year<=2014 | year>2017 
-//dropmiss year, obs force
+replace year=. if year<=2014 | year>2018 
+dropmiss year, obs force
+
+*4.- Guardar Cambios en Data.dta
+
+save "_OUT\DATA.dta", replace
