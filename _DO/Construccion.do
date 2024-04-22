@@ -5,6 +5,11 @@ clear
 //                                //
 ////////////////////////////////////
 
+// generar gini educativo por id
+local gy 0
+
+
+////////////////////////////////////////////////////////////////////////////////
 use _IN\echBOLVIA.dta
 
 * 1.- Limpiar Datos
@@ -12,7 +17,7 @@ use _IN\echBOLVIA.dta
 // Eliminar datos no utilizados
 gen gini=1
 
-replace year=. if year<2015 | year>2018
+replace year=. if year<2014 | year>2022
 dropmiss year, obs force
 
 replace born_year=. if born_year<=1979
@@ -101,7 +106,7 @@ di "$id_var"
 di "$cv_var"
 
 *3.- Generar Id para Pseudo-Panel
-
+// propensity score matching puede ser una solución 
 
 cap drop id_rd 
 
@@ -130,9 +135,9 @@ restore
 *3.- Generar el Gini para educación
 
 
-cap drop gini
-cap drop id_rd_num
-gen gini=.
+if `gy'==1{
+do _DO\Gini_by_year.do
+}
 
 destring id_rd, gen(id_rd_num) 
 
@@ -145,17 +150,6 @@ gen x=1
 egen tam_clust = total(x), by(id_rd)
 drop x
 
-//di "$id_C" 
-
-foreach r of local id_count{
-	
-quietly ineqdec0 ynived [iw=factor_ine]  if id_rd_num==`r'
-
-quietly replace gini=r(gini) if id_rd_num==`r'
-	
-} 
-
-
 *4.- Comprimir la base de datos
 
 //di "`ds_list'"
@@ -164,6 +158,9 @@ local ds_list "`ds_list' tam_clust"
 
 collapse `ds_list', by(id_rd)
 
+if `gy'==0{
+cap drop gini
+}
 // Guardar en DATA.dta
 
 save "_OUT\DATA.dta", replace

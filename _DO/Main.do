@@ -16,13 +16,13 @@ clear all
 
 ////////////////////////////////////////////////// DO Files /////////////////////////////////////////////////
 
-* Memory allocation
+
 
 //////////////////////////Construcción de Pseudo-Panel//////////////////////////
 
 * Comparación entre los CV de las diferentes variables
 
-//do _DO\Construccion.do
+do _DO\Construccion.do
 
 *Comportamiento de Años de la encuesta
 
