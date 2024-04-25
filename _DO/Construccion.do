@@ -24,7 +24,7 @@ replace born_year=. if born_year<=1979
 dropmiss born_year, obs force
 dropmiss born_month, obs force
 
-replace born_year=. if born_year<=1979 & born_year>2022
+replace born_year=. if born_year<=1979 | born_year>2001
 dropmiss born_year, obs force
 
 replace edad=. if edad<=17
@@ -112,7 +112,7 @@ cap drop id_rd
 
 ds
 local ds_list `r(varlist)'
-egen id_rd = concat(year female born_month born_year)
+egen id_rd = concat(year born_month born_year female)
 
 // (Las variables ,year ,idep ,female ,edad y born_month presentan un CV relativamente pequeño para poder realizar el analisis)
 
