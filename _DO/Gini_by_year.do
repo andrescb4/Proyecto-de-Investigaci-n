@@ -13,7 +13,7 @@ quietly levelsof id_rd_num , local(id_count)
 
 qui global id_C "`id_count'" 
 
-cap drop
+cap drop x
 gen x=1
 egen tam_clust = total(x), by(id_rd)
 drop x

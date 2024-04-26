@@ -16,7 +16,7 @@ use _IN\echBOLVIA.dta
 
 // Eliminar datos no utilizados
 gen gini=1
-
+gen sd_edu=1
 replace year=. if year<2014 | year>2022
 dropmiss year, obs force
 
@@ -131,6 +131,10 @@ display `cv'
 
 restore
 
+cap drop x
+gen x=1
+egen tam_clust = total(x), by(id_rd)
+drop x
 
 *3.- Generar el Gini para educación
 
@@ -145,14 +149,45 @@ quietly levelsof id_rd_num , local(id_count)
 
 qui global id_C "`id_count'" 
 
-cap drop
-gen x=1
-egen tam_clust = total(x), by(id_rd)
-drop x
 
-*4.- Comprimir la base de datos
+*4.- Generar SD para cada grupo
+cap drop id_rd_num
+
+destring id_rd, gen(id_rd_num) 
+
+cap drop sd_edu
+gen sd_edu=.
+
+quietly levelsof id_rd, local(id_co)
+
+
+foreach r of local id_co{
+	
+sum yedc if id_rd_num==`r'
+
+replace sd_edu=r(sd) if id_rd_num==`r'
+	
+}
+
+
+*5.- Comprimir la base de datos
+
+//save labels
+foreach v of var * {
+ local l`v' : variable label `v'
+ if `"`l`v''"' == "" {
+ local l`v' "`v'"
+}
+
+di  `"`l`v''"'
+
+}
+
+
+
 
 //di "`ds_list'"
+//Collapse
 
 local ds_list "`ds_list' tam_clust"
 
@@ -161,6 +196,13 @@ collapse `ds_list', by(id_rd)
 if `gy'==0{
 cap drop gini
 }
+
+//Paste labels
+
+foreach v of var * {
+ label var `v' `"`l`v''"'
+}
+
 // Guardar en DATA.dta
 
 save "_OUT\DATA.dta", replace
