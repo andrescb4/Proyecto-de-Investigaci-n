@@ -60,8 +60,8 @@ graph export "_GRAPHS\_PNG\Histogramas por año.png", as(png) name("Graph") repl
 
 * 4.- Eliminar años no utilizados de la base de datos agrupada
 
-replace year=. if year<=2015 | year>2022 
-dropmiss year, obs force
+//replace year=. if year<=2015 | year>2022 
+//dropmiss year, obs force
 
 * 5.- Generar variable de identificación para pseudopanel
 

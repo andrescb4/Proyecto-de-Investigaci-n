@@ -17,8 +17,8 @@ use _IN\echBOLVIA.dta
 // Eliminar datos no utilizados
 gen gini=1
 gen sd_edu=1
-replace year=. if year<2014 | year>2022
-dropmiss year, obs force
+//replace year=. if year<2014 | year>2022
+//dropmiss year, obs force
 
 replace born_year=. if born_year<=1979
 dropmiss born_year, obs force
@@ -61,6 +61,16 @@ cap drop hc_d2_d
 cap drop hc_d2_e
 cap drop hc_d2_f
 cap drop hc_d2_g
+cap drop ipro
+cap drop isec
+cap drop ican
+cap drop iloc
+cap drop izon
+cap drop isect
+cap drop iseg
+cap drop imanz
+cap drop iviv
+cap drop ibol 
 
 *2.- Realizar las pruebas de Coeficiente de variación probando clusters de observaciónes
 
@@ -163,9 +173,9 @@ quietly levelsof id_rd, local(id_co)
 
 foreach r of local id_co{
 	
-sum yedc if id_rd_num==`r'
+quietly sum yedc if id_rd_num==`r'
 
-replace sd_edu=r(sd) if id_rd_num==`r'
+quietly replace sd_edu=r(sd) if id_rd_num==`r'
 	
 }
 
@@ -200,7 +210,7 @@ cap drop gini
 //Paste labels
 
 foreach v of var * {
- label var `v' `"`l`v''"'
+quietly label var `v' `"`l`v''"'
 }
 
 // Guardar en DATA.dta
