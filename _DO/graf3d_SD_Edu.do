@@ -100,16 +100,6 @@ cap drop dob
 
 replace yedc=yedc-0.5045719 if dic==1
 
-replace yedc=yedc+0.4595234 if dict==1 & dic==1
-
-replace yedc=yedc+0.4317902 if dict==2
-
-replace yedc=yedc+0.3353724 if dict==3
-
-replace yedc=yedc+0.2320085 if dict==4
-
-replace yedc=yedc+0.0816574 if dict==5
-
 
 save _OUT\3dg2.dta, replace
 

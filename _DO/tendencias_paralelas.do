@@ -9,7 +9,7 @@ replace dic=1 if born_year>1995
 
 bysort dic year: egen ave_yedu=mean(yedc)
 
-twoway (connected ave_yedu year if dic==0 & year>2015 & year<2020, mlabel(year) legend(label(1 "Control"))) (connected ave_yedu year if dic==1 & year>2015 & year<2020, mlabel(year) legend(label(2 "Treatment")))
+twoway (connected ave_yedu year if dic==0 & year>2014 & year<2022, mlabel(year) legend(label(1 "Control"))) (connected ave_yedu year if dic==1 & year>2014 & year<2022, mlabel(year) legend(label(2 "Treatment")))
 
 bysort dic year: egen ave_sdedu=mean(sd_edu)
 

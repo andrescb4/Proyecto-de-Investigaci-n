@@ -42,7 +42,7 @@ xttest0
 
 *Regresión tentativa
 
-xtreg sd_edu  i.year dic 1.dic#dict female rural b_y,  re 
+xtreg sd_edu i.year dic 1.dic#dict female rural b_y,  re 
 
 //matrix define A = r(table)
 
