@@ -1,9 +1,13 @@
 
+clear
+cls
+use "_OUT\DATA.dta", clear
+
 //replace year=. if year<=2013 | year>2016
 //dropmiss year, obs force
 
 
-tab born_year year
+//tab born_year year
 
 destring id_pd, replace
 xtset id_pd year

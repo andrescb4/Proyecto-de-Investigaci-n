@@ -15,6 +15,9 @@ qui global id_C "`id_count'"
 
 cap drop x
 gen x=1
+
+cap drop tam_clust
+
 egen tam_clust = total(x), by(id_rd)
 drop x
 

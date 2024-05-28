@@ -6,7 +6,7 @@ clear
 ////////////////////////////////////
 
 // generar gini educativo por id
-local gy 0
+local gy 1
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -20,17 +20,24 @@ gen sd_edu=1
 //replace year=. if year<2014 | year>2022
 //dropmiss year, obs force
 
-replace born_year=. if born_year<=1979
+replace born_year=. if born_year<=1990
 dropmiss born_year, obs force
-dropmiss born_month, obs force
+//dropmiss born_month, obs force
 
-replace born_year=. if born_year<=1979 | born_year>2001
+replace born_year=. if born_year>2001
 dropmiss born_year, obs force
 
-replace edad=. if edad<=17
-dropmiss edad, obs force
+
+cap drop cont_edad
+
+gen cont_edad=year-born_year
+
+replace cont_edad=. if cont_edad<=17
+dropmiss cont_edad, obs force
 
 // Generar variable de años de educación por nivel educativo
+
+tabulate idep, gen(dep)
 
 cap drop ynived
 
@@ -143,6 +150,9 @@ restore
 
 cap drop x
 gen x=1
+
+cap drop tam_clust
+
 egen tam_clust = total(x), by(id_rd)
 drop x
 
@@ -153,12 +163,15 @@ if `gy'==1{
 do _DO\Gini_by_year.do
 }
 
+if `gy'==0{
+
 destring id_rd, gen(id_rd_num) 
 
 quietly levelsof id_rd_num , local(id_count)
 
 qui global id_C "`id_count'" 
 
+}
 
 *4.- Generar SD para cada grupo
 cap drop id_rd_num
