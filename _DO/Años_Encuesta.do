@@ -74,9 +74,9 @@ cap drop x2
 cap drop kd_t
 cap drop kd_c
 
-quietly kdensity yedc if born_year<1996, generate(x kd_c)
+quietly kdensity yedc if born_year<1996 & year>2015 & year<2021, generate(x kd_c)
 
-quietly kdensity yedc if born_year>1995, generate(x2 kd_t)
+quietly kdensity yedc if born_year>1995 & year>2015 & year<2021, generate(x2 kd_t)
 
 line kd_c kd_t x, sort ytitle(Density) legend(cols(1))
 

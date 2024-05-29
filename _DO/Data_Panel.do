@@ -27,8 +27,9 @@ gen dic=0
 replace dic=1 if born_year>1995
 
 cap drop dict
-gen dict=0
-replace dict=dic*(born_year-1996)
+gen dict=.
+replace dict=dic*(born_year-1995)
+
 //replace dict=. if dic==0
 
 gen b_y=born_year-1990
@@ -36,13 +37,27 @@ gen b_y=born_year-1990
 pwcorr yedc dic lnyhogpc idep 
 
 tab dic
-quietly xtreg yedc dic lnyhogpc idep, re
+quietly xtreg sd_edu dic dict, re
 xttest0
 //housman test
 
 *Regresión tentativa
 
-xtreg sd_edu i.year dic 1.dic#dict female rural b_y,  re 
+xtreg sd_edu i.year dic 1.dic#ib(1).dict rural ethnic0 b_y,  re 
+
+// Test de heterosedasticidad
+
+cap drop resid
+cap drop resid_sq
+predict resid, e
+gen resid_sq = resid^2
+
+reg resid_sq i.year dic 1.dic#ib(1).dict rural ethnic0 b_y
+
+xtpcse sd_edu i.year dic 1.dic#ib(1).dict rural ethnic0 b_y, het
+// Test de Autocorrelación
+xtserial sd_edu year dic dict rural ethnic0 b_y, output 
+
 
 //matrix define A = r(table)
 
@@ -55,20 +70,31 @@ xtreg sd_edu i.year dic 1.dic#dict female rural b_y,  re
 xttest0
 xtcsd, pesaran abs
 estat vce, corr
+* Regresión para desviación estandar en años de educación
 
-xtreg yedc i.year dic 1.dic#dict female rural lnyhogpc born_year,  re
+reg yedc dic ib(1).dict ethnic0 female lnyhogpc rural if year>2015 & year<2021
 
-matrix define A = r(table)
+vif
+estat imtest, white
+estat hettest, normal
 
-matrix define B = A'
+cap drop error
+predict error, resid
+swilk error
+sktest error
 
-putexcel set "C:\Users\Andres\Desktop\Tablas regresiónales.xlsx", sheet(yedu) modify 
 
-putexcel d6=matrix(B), rownames
+reg yedc dic if year>2015 & year<2021 & born_year==1995 | born_year==1996
 
-xttest0
+//matrix define A = r(table)
 
-estat vce, corr
+//matrix define B = A'
+
+//putexcel set "C:\Users\Andres\Desktop\Tablas regresiónales.xlsx", sheet(yedu) modify 
+
+//putexcel d6=matrix(B), rownames
+
+*Regresión para promedio en años de educación
 
 xtreg yedc dic lnyhogpc i.born_year year, re 
 estimates store re1
