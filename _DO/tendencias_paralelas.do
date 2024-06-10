@@ -5,6 +5,9 @@ use "_OUT\DATA.dta", clear
 cap drop dic
 gen dic=0
 replace dic=1 if born_year>1995
+cap drop lnyhogpc
+gen lnyhogpc = ln(ine_yhogpc)
+
 
 *grafico de tendencias paralelas
 bysort dic year : egen ave_yedu=mean(yedc)

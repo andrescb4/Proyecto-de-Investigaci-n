@@ -41,9 +41,11 @@ quietly xtreg sd_edu dic dict, re
 xttest0
 //housman test
 
-*Regresión tentativa
+*Regresión SD_edu
 
-xtreg sd_edu i.year dic 1.dic#ib(1).dict rural ethnic0 b_y,  re 
+xtreg sd_edu ib(2016).year dic 1.dic#ib(1).dict rural ethnic0 b_y,  re 
+
+xttest0
 
 // Test de heterosedasticidad
 
@@ -55,19 +57,22 @@ gen resid_sq = resid^2
 reg resid_sq i.year dic 1.dic#ib(1).dict rural ethnic0 b_y
 
 xtpcse sd_edu i.year dic 1.dic#ib(1).dict rural ethnic0 b_y, het
+
 // Test de Autocorrelación
-xtserial sd_edu year dic dict rural ethnic0 b_y, output 
+//xtserial sd_edu year dic dict rural ethnic0 b_y, output 
 
 
-//matrix define A = r(table)
+matrix define A = r(table)
 
-//matrix define B = A'
+matrix define B = A'
 
-//putexcel set "C:\Users\Andres\Desktop\Tablas regresiónales.xlsx", sheet(SD) modify 
+matlist B
 
-//putexcel d6=matrix(B), rownames
+putexcel set "C:\Users\Andres\Desktop\Tablas regresiónales.xlsx", sheet(SD) modify 
 
-xttest0
+putexcel d6=matrix(B), rownames
+
+
 xtcsd, pesaran abs
 estat vce, corr
 * Regresión para desviación estandar en años de educación
