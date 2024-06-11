@@ -43,7 +43,7 @@ xttest0
 
 *Regresión SD_edu
 
-xtreg sd_edu ib(2016).year dic 1.dic#ib(1).dict rural ethnic0 b_y,  re 
+xtreg sd_edu ib(2016).year dic 1.dic#ib(1).dict rural ethnic0 b_y female,  re 
 
 xttest0
 
@@ -54,9 +54,9 @@ cap drop resid_sq
 predict resid, e
 gen resid_sq = resid^2
 
-reg resid_sq i.year dic 1.dic#ib(1).dict rural ethnic0 b_y
+reg resid_sq i.year dic 1.dic#ib(1).dict rural ethnic0 b_y female
 
-xtpcse sd_edu i.year dic 1.dic#ib(1).dict rural ethnic0 b_y, het
+xtpcse sd_edu i.year dic 1.dic#ib(1).dict rural ethnic0 b_y female, het
 
 // Test de Autocorrelación
 //xtserial sd_edu year dic dict rural ethnic0 b_y, output 
@@ -75,9 +75,13 @@ putexcel d6=matrix(B), rownames
 
 xtcsd, pesaran abs
 estat vce, corr
-* Regresión para desviación estandar en años de educación
+* Regresión para promedio en años de educación
+cap drop yeh
 
-reg yedc dic ib(1).dict ethnic0 female lnyhogpc rural if year>2015 & year<2021
+gen yeh=year-2014
+
+
+reg yedc yeh dic ib(1).dict ethnic0 female lnyhogpc rural if year>2015 & year<2021
 
 vif
 estat imtest, white
@@ -89,15 +93,15 @@ swilk error
 sktest error
 
 
-reg yedc dic if year>2015 & year<2021 & born_year==1995 | born_year==1996
+//reg yedc dic if year>2015 & year<2021 & born_year==1995 | born_year==1996
 
-//matrix define A = r(table)
+matrix define A = r(table)
 
-//matrix define B = A'
+matrix define B = A'
 
-//putexcel set "C:\Users\Andres\Desktop\Tablas regresiónales.xlsx", sheet(yedu) modify 
+putexcel set "C:\Users\Andres\Desktop\Tablas regresiónales.xlsx", sheet(yedu) modify 
 
-//putexcel d6=matrix(B), rownames
+putexcel d6=matrix(B), rownames
 
 *Regresión para promedio en años de educación
 
